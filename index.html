@@ -2,218 +2,533 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>마이퍼니발렌타인 코워크 대시보드</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0d1117;--card:#161b22;--border:#30363d;
-  --text:#e6edf3;--muted:#8b949e;--accent:#f78166;
-  --green:#3fb950;--blue:#58a6ff;--purple:#bc8cff;
-  --yellow:#d29922;--red:#f85149;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
-  background:var(--bg);color:var(--text);line-height:1.6;padding:0 0 80px}
+
+/* Header */
+.header {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 16px 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.logo { font-size: 22px; }
+.brand {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f0f6fc;
+  letter-spacing: -0.3px;
+}
+.date-badge {
+  margin-left: auto;
+  font-size: 12px;
+  color: #8b949e;
+  background: #21262d;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: #8b949e;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-btn:hover { color: #c9d1d9; }
+.tab-btn.active {
+  color: #f0f6fc;
+  border-bottom-color: #58a6ff;
+  font-weight: 600;
+}
+
+/* Content */
+.content { padding: 16px 20px 80px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Cards */
+.card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.badge-running { background: #0d4429; color: #3fb950; }
+.badge-connected { background: #0d4429; color: #3fb950; }
+.badge-done { background: #21262d; color: #8b949e; }
+.badge-warn { background: #3d2e00; color: #d29922; }
+.badge-error { background: #3d1418; color: #f85149; }
+.badge-manual { background: #1c2541; color: #58a6ff; }
+
+/* List Items */
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid #21262d;
+  gap: 8px;
+}
+.list-item:last-child { border-bottom: none; }
+.list-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.list-icon { font-size: 18px; flex-shrink: 0; }
+.list-text {
+  font-size: 13px;
+  color: #c9d1d9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat-box {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0f6fc;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 11px;
+  color: #8b949e;
+}
+.stat-value.green { color: #3fb950; }
+.stat-value.blue { color: #58a6ff; }
+.stat-value.yellow { color: #d29922; }
+.stat-value.red { color: #f85149; }
+
+/* Progress Bar */
+.progress-bar {
+  height: 6px;
+  background: #21262d;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s;
+}
+
+/* Platform pills */
+.platform-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.platform-pill {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+
+/* Section divider */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 16px 0 8px;
+}
+
+/* Wide stat */
+.stat-wide {
+  grid-column: 1 / -1;
+}
 </style>
 </head>
 <body>
-<header style="background:linear-gradient(135deg,#1a1625 0%,#0d1117 100%);
-  padding:24px 16px;border-bottom:1px solid var(--border);text-align:center">
-  <div style="font-size:28px;margin-bottom:4px">🕯️</div>
-  <h1 style="font-size:20px;font-weight:700;letter-spacing:-0.3px">마이퍼니발렌타인</h1>
-  <p style="font-size:12px;color:var(--muted);margin-top:2px">코워크 자동화 대시보드</p>
-  <p style="font-size:11px;color:var(--muted);margin-top:8px" id="updateTime"></p>
-</header>
 
-<main style="max-width:640px;margin:0 auto;padding:16px">
+<div class="header">
+  <div class="header-top">
+    <span class="logo">🕯️</span>
+    <span class="brand">마이퍼니발렌타인</span>
+    <span class="date-badge" id="todayDate"></span>
+  </div>
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="today">오늘 할 일</button>
+    <button class="tab-btn" data-tab="automation">자동화 현황</button>
+    <button class="tab-btn" data-tab="scheduled">예약 작업</button>
+    <button class="tab-btn" data-tab="ads">광고</button>
+    <button class="tab-btn" data-tab="sales">매출</button>
+    <button class="tab-btn" data-tab="youtube">유튜브</button>
+  </nav>
+</div>
 
-<!-- 예약 작업 현황 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px">
-    <span style="color:var(--green)">●</span> 예약 작업 현황
-  </h2>
-  <div id="scheduledTasks" style="display:flex;flex-direction:column;gap:8px">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:14px;font-weight:600">📈 주식/코인 시그널</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 7시 · 14시 · 21시</div>
+<div class="content">
+
+  <!-- 오늘 할 일 -->
+  <div class="tab-panel active" id="tab-today">
+    <div class="card">
+      <div class="card-title">📋 오늘의 업무</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🛒</span>
+          <span class="list-text">3개 플랫폼 주문 확인</span>
+        </div>
+        <span class="badge badge-warn">대기</span>
       </div>
-      <div style="text-align:right">
-        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
-        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextSignal"></div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📦</span>
+          <span class="list-text">발송 대기 건 배송 처리</span>
+        </div>
+        <span class="badge badge-warn">대기</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🏠</span>
+          <span class="list-text">오늘의집 미확인 주문 처리</span>
+        </div>
+        <span class="badge badge-warn">대기</span>
       </div>
     </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:14px;font-weight:600">📊 메타 광고 리포트</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 아침 9시</div>
-      </div>
-      <div style="text-align:right">
-        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
-        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextMeta"></div>
-      </div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:14px;font-weight:600">📦 운송장 자동화</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 18:30 (일~금)</div>
-      </div>
-      <div style="text-align:right">
-        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
-        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextWaybill"></div>
+    <div class="card">
+      <div class="card-title">⚡ 빠른 실행</div>
+      <div class="platform-row">
+        <span class="platform-pill">🟢 스마트스토어</span>
+        <span class="platform-pill">🟠 Cafe24 자사몰</span>
+        <span class="platform-pill">🔵 오늘의집</span>
       </div>
     </div>
   </div>
-</section>
 
-<!-- 주문/배송 자동화 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📦 주문/배송 자동화</h2>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
-    <div class="ci"><span class="ck done">✓</span><span>네이버 스마트스토어 API 연결</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>Cafe24 자사몰 API 연결</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>오늘의집 판매자센터 연동</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>CJ대한통운 운송장 엑셀 자동 생성</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>3개 플랫폼 주문 수집 자동화</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>CJ LOIS 업로드 자동화</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>운송장 번호 각 플랫폼 자동 등록</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>주문내역 엑셀 자동 정리</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>구글 드라이브 자동 업로드</span></div>
-    <div style="margin-top:10px;text-align:right">
-      <span style="font-size:12px;color:var(--green)">9/9 완료</span>
-      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
-        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+  <!-- 자동화 현황 -->
+  <div class="tab-panel" id="tab-automation">
+    <div class="card">
+      <div class="card-title">🔗 API 연동</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🟢</span>
+          <span class="list-text">스마트스토어 API</span>
+        </div>
+        <span class="badge badge-connected">연결됨</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🟢</span>
+          <span class="list-text">Cafe24 API</span>
+        </div>
+        <span class="badge badge-connected">연결됨</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🟢</span>
+          <span class="list-text">Meta 광고 API (영구 토큰)</span>
+        </div>
+        <span class="badge badge-connected">연결됨</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚙️ 자동화 프로세스</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📦</span>
+          <span class="list-text">CJ대한통운 운송장 엑셀 자동 생성</span>
+        </div>
+        <span class="badge badge-connected">✅</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🛒</span>
+          <span class="list-text">3개 플랫폼 주문 수집</span>
+        </div>
+        <span class="badge badge-connected">✅</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📊</span>
+          <span class="list-text">오늘의집 광고 분석</span>
+        </div>
+        <span class="badge badge-connected">✅</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🎬</span>
+          <span class="list-text">YouTube 영상 자동 생성</span>
+        </div>
+        <span class="badge badge-connected">✅</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📤</span>
+          <span class="list-text">YouTube 업로드</span>
+        </div>
+        <span class="badge badge-connected">✅</span>
       </div>
     </div>
   </div>
-</section>
 
-<!-- 광고/분석 자동화 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📊 광고/분석 자동화</h2>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
-    <div class="ci"><span class="ck done">✓</span><span>Meta 광고 API 영구 토큰 세팅</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>Meta 광고 일일 리포트 (매일 9시 iMessage)</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>오늘의집 광고 분석 리포트</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>3개 플랫폼 매출 데이터 정리</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>손익분석 (Q1 + 3월)</span></div>
-    <div style="margin-top:10px;text-align:right">
-      <span style="font-size:12px;color:var(--green)">5/5 완료</span>
-      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
-        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+  <!-- 예약 작업 -->
+  <div class="tab-panel" id="tab-scheduled">
+    <div class="card">
+      <div class="card-title">⏰ 정기 실행</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📈</span>
+          <span class="list-text">주식/코인 시그널</span>
+        </div>
+        <span class="badge badge-running">● 실행중</span>
+      </div>
+      <div style="font-size:11px; color:#8b949e; padding: 0 0 8px 28px; margin-top:-4px;">매일 7시 · 14시 · 21시 iMessage 전송</div>
+
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📣</span>
+          <span class="list-text">Meta 광고 리포트</span>
+        </div>
+        <span class="badge badge-running">● 실행중</span>
+      </div>
+      <div style="font-size:11px; color:#8b949e; padding: 0 0 8px 28px; margin-top:-4px;">매일 9시 iMessage 전송</div>
+
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">📦</span>
+          <span class="list-text">운송장 자동화</span>
+        </div>
+        <span class="badge badge-manual">수동 트리거</span>
+      </div>
+      <div style="font-size:11px; color:#8b949e; padding: 0 0 4px 28px; margin-top:-4px;">"운송장 등록" 명령으로 실행</div>
+    </div>
+  </div>
+
+  <!-- 광고 -->
+  <div class="tab-panel" id="tab-ads">
+    <div class="card">
+      <div class="card-title">📣 Meta 광고</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value blue" id="metaRoas">—</div>
+          <div class="stat-label">ROAS</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="metaSpend">—</div>
+          <div class="stat-label">광고비 (7일)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value green" id="metaConv">—</div>
+          <div class="stat-label">전환수 (7일)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="metaCpc">—</div>
+          <div class="stat-label">CPC</div>
+        </div>
+      </div>
+      <div style="font-size:11px; color:#8b949e; margin-top:10px; text-align:center;">매일 9시 자동 리포트 · Cowork에서 "메타 광고 분석" 실행</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏠 오늘의집 광고</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value blue" id="ohouseRoas">—</div>
+          <div class="stat-label">ROAS</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="ohouseCpc">—</div>
+          <div class="stat-label">CPC</div>
+        </div>
+      </div>
+      <div style="font-size:11px; color:#8b949e; margin-top:10px; text-align:center;">Cowork에서 "오늘의집 광고 분석" 실행</div>
+    </div>
+  </div>
+
+  <!-- 매출 -->
+  <div class="tab-panel" id="tab-sales">
+    <div class="card">
+      <div class="card-title">💰 Q1 2025 매출 요약</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value">₩8,164,889</div>
+          <div class="stat-label">Q1 총 매출</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value green">₩1,483,910</div>
+          <div class="stat-label">영업이익 (18.2%)</div>
+        </div>
+        <div class="stat-box stat-wide">
+          <div class="stat-value green">₩1,915,455</div>
+          <div class="stat-label">3월 영업이익 (44.4%) 🔥</div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+    <div class="card">
+      <div class="card-title">📊 플랫폼별 비중</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🏠</span>
+          <span class="list-text">오늘의집</span>
+        </div>
+        <span style="font-size:13px; color:#58a6ff; font-weight:600;">메인</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:55%; background:#58a6ff;"></div></div>
 
-<!-- 주식/코인 시그널 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📈 주식/코인 시그널</h2>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
-    <div class="ci"><span class="ck done">✓</span><span>매일 3회 (7시/14시/21시) iMessage 발송</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>이격도, 실업수당, TGA 잔고 포함</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>매수 점수 0~10점 표시</span></div>
-    <div style="margin-top:10px;text-align:right">
-      <span style="font-size:12px;color:var(--green)">3/3 완료</span>
-      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
-        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      <div class="list-item" style="margin-top:8px;">
+        <div class="list-item-left">
+          <span class="list-icon">🟢</span>
+          <span class="list-text">스마트스토어</span>
+        </div>
+        <span style="font-size:13px; color:#3fb950; font-weight:600;">성장</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:30%; background:#3fb950;"></div></div>
+
+      <div class="list-item" style="margin-top:8px;">
+        <div class="list-item-left">
+          <span class="list-icon">🟠</span>
+          <span class="list-text">Cafe24 자사몰</span>
+        </div>
+        <span style="font-size:13px; color:#d29922; font-weight:600;">운영중</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:15%; background:#d29922;"></div></div>
+    </div>
+  </div>
+
+  <!-- 유튜브 -->
+  <div class="tab-panel" id="tab-youtube">
+    <div class="card">
+      <div class="card-title">🎬 시니어 생활백서</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value">4</div>
+          <div class="stat-label">업로드 영상</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value blue" id="ytViews">—</div>
+          <div class="stat-label">총 조회수</div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 유튜브 자동화 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">🎬 유튜브 자동화</h2>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
-    <div class="ci"><span class="ck done">✓</span><span>영상 자동 생성 파이프라인 (edge-tts + MoviePy)</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>YouTube 업로드 스킬 (Scotty API + OAuth)</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>커스텀 썸네일 자동 생성 (Canvas API)</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>영상 4개 업로드 완료</span></div>
-    <div style="margin-top:10px;text-align:right">
-      <span style="font-size:12px;color:var(--green)">4/4 완료</span>
-      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
-        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+    <div class="card">
+      <div class="card-title">📋 업로드 현황</div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🎥</span>
+          <span class="list-text">영상 1 — 업로드 완료</span>
+        </div>
+        <span class="badge badge-done">완료</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 기타 -->
-<section style="margin-bottom:20px">
-  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">💡 기타</h2>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
-    <div class="ci"><span class="ck done">✓</span><span>노션 아이디어 리스트 DB</span></div>
-    <div class="ci"><span class="ck done">✓</span><span>메리츠증권 API (시세 조회용)</span></div>
-    <div style="margin-top:10px;text-align:right">
-      <span style="font-size:12px;color:var(--green)">2/2 완료</span>
-      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
-        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🎥</span>
+          <span class="list-text">영상 2 — 업로드 완료</span>
+        </div>
+        <span class="badge badge-done">완료</span>
       </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🎥</span>
+          <span class="list-text">영상 3 — 업로드 완료</span>
+        </div>
+        <span class="badge badge-done">완료</span>
+      </div>
+      <div class="list-item">
+        <div class="list-item-left">
+          <span class="list-icon">🎥</span>
+          <span class="list-text">영상 4 — 업로드 완료</span>
+        </div>
+        <span class="badge badge-done">완료</span>
+      </div>
+      <div style="font-size:11px; color:#8b949e; margin-top:10px; text-align:center;">AI 자동 생성 + 자동 업로드 ✅</div>
     </div>
   </div>
-</section>
 
-<!-- 전체 통계 -->
-<section style="margin-bottom:20px">
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
-      <div style="font-size:24px;font-weight:700;color:var(--green)">23</div>
-      <div style="font-size:11px;color:var(--muted)">완료 항목</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
-      <div style="font-size:24px;font-weight:700;color:var(--blue)">3</div>
-      <div style="font-size:11px;color:var(--muted)">활성 작업</div>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
-      <div style="font-size:24px;font-weight:700;color:var(--accent)">5</div>
-      <div style="font-size:11px;color:var(--muted)">카테고리</div>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<style>
-.ci{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
-.ci:last-of-type{border-bottom:none}
-.ci span:last-child{font-size:13px}
-.ck{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;
-  font-size:11px;flex-shrink:0;border:2px solid var(--border);color:transparent}
-.ck.done{background:var(--green);border-color:var(--green);color:#fff}
-.ck.pending{background:transparent;border-color:var(--border)}
-</style>
+</div>
 
 <script>
-function updateTimes(){
-  const now=new Date();
-  document.getElementById('updateTime').textContent='마지막 업데이트: '+now.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
-  
-  const hours=[7,14,21];
-  let next=null;
-  const koNow=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
-  for(const h of hours){
-    const t=new Date(koNow);t.setHours(h,0,0,0);
-    if(t>koNow){next=t;break}
-  }
-  if(!next){const t=new Date(koNow);t.setDate(t.getDate()+1);t.setHours(7,0,0,0);next=t}
-  const diff=next-koNow;
-  const hh=Math.floor(diff/3600000);const mm=Math.floor((diff%3600000)/60000);
-  document.getElementById('nextSignal').textContent='다음: '+hh+'시간 '+mm+'분 후';
-  
-  const meta=new Date(koNow);meta.setHours(9,0,0,0);
-  if(meta<=koNow)meta.setDate(meta.getDate()+1);
-  const md=meta-koNow;const mh=Math.floor(md/3600000);const mmm=Math.floor((md%3600000)/60000);
-  document.getElementById('nextMeta').textContent='다음: '+mh+'시간 '+mmm+'분 후';
+// Date
+const d = new Date();
+document.getElementById('todayDate').textContent =
+  `${d.getMonth()+1}/${d.getDate()} ${['일','월','화','수','목','금','토'][d.getDay()]}`;
 
-  const wb=new Date(koNow);wb.setHours(18,30,0,0);
-  if(wb<=koNow)wb.setDate(wb.getDate()+1);
-  const wd=wb-koNow;const wh=Math.floor(wd/3600000);const wm=Math.floor((wd%3600000)/60000);
-  document.getElementById('nextWaybill').textContent='다음: '+wh+'시간 '+wm+'분 후';
-}
-updateTimes();
-setInterval(updateTimes,60000);
+// Tab switching
+const btns = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.tab-panel');
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
 </script>
-
 </body>
 </html>
