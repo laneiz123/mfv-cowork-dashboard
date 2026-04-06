@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마이퍼니발렌타인 코워크 대시보드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--card:#161b22;--border:#30363d;
+  --text:#e6edf3;--muted:#8b949e;--accent:#f78166;
+  --green:#3fb950;--blue:#58a6ff;--purple:#bc8cff;
+  --yellow:#d29922;--red:#f85149;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;padding:0 0 80px}
+</style>
+</head>
+<body>
+<header style="background:linear-gradient(135deg,#1a1625 0%,#0d1117 100%);
+  padding:24px 16px;border-bottom:1px solid var(--border);text-align:center">
+  <div style="font-size:28px;margin-bottom:4px">🕯️</div>
+  <h1 style="font-size:20px;font-weight:700;letter-spacing:-0.3px">마이퍼니발렌타인</h1>
+  <p style="font-size:12px;color:var(--muted);margin-top:2px">코워크 자동화 대시보드</p>
+  <p style="font-size:11px;color:var(--muted);margin-top:8px" id="updateTime"></p>
+</header>
+
+<main style="max-width:640px;margin:0 auto;padding:16px">
+
+<!-- 예약 작업 현황 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+    <span style="color:var(--green)">●</span> 예약 작업 현황
+  </h2>
+  <div id="scheduledTasks" style="display:flex;flex-direction:column;gap:8px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:600">📈 주식/코인 시그널</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 7시 · 14시 · 21시</div>
+      </div>
+      <div style="text-align:right">
+        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextSignal"></div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:600">📊 메타 광고 리포트</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 아침 9시</div>
+      </div>
+      <div style="text-align:right">
+        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextMeta"></div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:14px;font-weight:600">📦 운송장 자동화</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">매일 18:30 (일~금)</div>
+      </div>
+      <div style="text-align:right">
+        <span style="background:#238636;color:#fff;font-size:11px;padding:3px 8px;border-radius:20px">활성</span>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px" id="nextWaybill"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 주문/배송 자동화 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📦 주문/배송 자동화</h2>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+    <div class="ci"><span class="ck done">✓</span><span>네이버 스마트스토어 API 연결</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>Cafe24 자사몰 API 연결</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>오늘의집 판매자센터 연동</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>CJ대한통운 운송장 엑셀 자동 생성</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>3개 플랫폼 주문 수집 자동화</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>CJ LOIS 업로드 자동화</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>운송장 번호 각 플랫폼 자동 등록</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>주문내역 엑셀 자동 정리</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>구글 드라이브 자동 업로드</span></div>
+    <div style="margin-top:10px;text-align:right">
+      <span style="font-size:12px;color:var(--green)">9/9 완료</span>
+      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
+        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 광고/분석 자동화 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📊 광고/분석 자동화</h2>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+    <div class="ci"><span class="ck done">✓</span><span>Meta 광고 API 영구 토큰 세팅</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>Meta 광고 일일 리포트 (매일 9시 iMessage)</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>오늘의집 광고 분석 리포트</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>3개 플랫폼 매출 데이터 정리</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>손익분석 (Q1 + 3월)</span></div>
+    <div style="margin-top:10px;text-align:right">
+      <span style="font-size:12px;color:var(--green)">5/5 완료</span>
+      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
+        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 주식/코인 시그널 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">📈 주식/코인 시그널</h2>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+    <div class="ci"><span class="ck done">✓</span><span>매일 3회 (7시/14시/21시) iMessage 발송</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>이격도, 실업수당, TGA 잔고 포함</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>매수 점수 0~10점 표시</span></div>
+    <div style="margin-top:10px;text-align:right">
+      <span style="font-size:12px;color:var(--green)">3/3 완료</span>
+      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
+        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 유튜브 자동화 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">🎬 유튜브 자동화</h2>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+    <div class="ci"><span class="ck done">✓</span><span>영상 자동 생성 파이프라인 (edge-tts + MoviePy)</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>YouTube 업로드 스킬 (Scotty API + OAuth)</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>커스텀 썸네일 자동 생성 (Canvas API)</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>영상 4개 업로드 완료</span></div>
+    <div style="margin-top:10px;text-align:right">
+      <span style="font-size:12px;color:var(--green)">4/4 완료</span>
+      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
+        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 기타 -->
+<section style="margin-bottom:20px">
+  <h2 style="font-size:14px;color:var(--muted);margin-bottom:12px">💡 기타</h2>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+    <div class="ci"><span class="ck done">✓</span><span>노션 아이디어 리스트 DB</span></div>
+    <div class="ci"><span class="ck done">✓</span><span>메리츠증권 API (시세 조회용)</span></div>
+    <div style="margin-top:10px;text-align:right">
+      <span style="font-size:12px;color:var(--green)">2/2 완료</span>
+      <div style="background:var(--border);border-radius:4px;height:4px;margin-top:4px">
+        <div style="background:var(--green);height:4px;border-radius:4px;width:100%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 전체 통계 -->
+<section style="margin-bottom:20px">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--green)">23</div>
+      <div style="font-size:11px;color:var(--muted)">완료 항목</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--blue)">3</div>
+      <div style="font-size:11px;color:var(--muted)">활성 작업</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+      <div style="font-size:24px;font-weight:700;color:var(--accent)">5</div>
+      <div style="font-size:11px;color:var(--muted)">카테고리</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<style>
+.ci{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+.ci:last-of-type{border-bottom:none}
+.ci span:last-child{font-size:13px}
+.ck{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;flex-shrink:0;border:2px solid var(--border);color:transparent}
+.ck.done{background:var(--green);border-color:var(--green);color:#fff}
+.ck.pending{background:transparent;border-color:var(--border)}
+</style>
+
+<script>
+function updateTimes(){
+  const now=new Date();
+  document.getElementById('updateTime').textContent='마지막 업데이트: '+now.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'});
+  
+  const hours=[7,14,21];
+  let next=null;
+  const koNow=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
+  for(const h of hours){
+    const t=new Date(koNow);t.setHours(h,0,0,0);
+    if(t>koNow){next=t;break}
+  }
+  if(!next){const t=new Date(koNow);t.setDate(t.getDate()+1);t.setHours(7,0,0,0);next=t}
+  const diff=next-koNow;
+  const hh=Math.floor(diff/3600000);const mm=Math.floor((diff%3600000)/60000);
+  document.getElementById('nextSignal').textContent='다음: '+hh+'시간 '+mm+'분 후';
+  
+  const meta=new Date(koNow);meta.setHours(9,0,0,0);
+  if(meta<=koNow)meta.setDate(meta.getDate()+1);
+  const md=meta-koNow;const mh=Math.floor(md/3600000);const mmm=Math.floor((md%3600000)/60000);
+  document.getElementById('nextMeta').textContent='다음: '+mh+'시간 '+mmm+'분 후';
+
+  const wb=new Date(koNow);wb.setHours(18,30,0,0);
+  if(wb<=koNow)wb.setDate(wb.getDate()+1);
+  const wd=wb-koNow;const wh=Math.floor(wd/3600000);const wm=Math.floor((wd%3600000)/60000);
+  document.getElementById('nextWaybill').textContent='다음: '+wh+'시간 '+wm+'분 후';
+}
+updateTimes();
+setInterval(updateTimes,60000);
+</script>
+
+</body>
+</html>
